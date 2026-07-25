@@ -1,0 +1,728 @@
+/* ==========================================================================
+   AIR TICKET ITINERARY PDF GENERATOR - STYLESHEET
+   ========================================================================== */
+
+:root {
+  /* Studio Theme Dark Palette */
+  --bg-dark: #0f172a;
+  --bg-panel: #1e293b;
+  --bg-card: #334155;
+  --border-color: #475569;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-primary: #2563eb;
+  --accent-primary-hover: #1d4ed8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-danger: #ef4444;
+  
+  /* Ticket Themes */
+  --theme-cyan-header: #00e5ff;
+  --theme-cyan-text: #000000;
+  
+  --theme-navy-header: #1e3a8a;
+  --theme-navy-text: #ffffff;
+  
+  --theme-emerald-header: #047857;
+  --theme-emerald-text: #ffffff;
+  
+  --theme-crimson-header: #b91c1c;
+  --theme-crimson-text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ==========================================
+   HEADER NAVBAR
+   ========================================== */
+.app-header {
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-icon {
+  font-size: 1.8rem;
+  color: var(--accent-cyan);
+  transform: rotate(-15deg);
+}
+
+.brand h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Theme Picker */
+.theme-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.theme-picker select {
+  background: transparent;
+  color: var(--text-main);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.theme-picker select option {
+  background: var(--bg-panel);
+  color: var(--text-main);
+}
+
+/* Buttons */
+.btn {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--accent-primary-hover);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+}
+.btn-accent:hover {
+  background: linear-gradient(135deg, #047857, #059669);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+  background-color: #475569;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+.btn-ghost:hover {
+  color: var(--accent-danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+.btn-danger {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+.btn-danger:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.margin-top {
+  margin-top: 1rem;
+}
+
+/* ==========================================
+   STUDIO MAIN LAYOUT
+   ========================================== */
+.studio-container {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  flex: 1;
+  height: calc(100vh - 65px);
+  overflow: hidden;
+}
+
+/* Left Editor Panel */
+.editor-panel {
+  background-color: var(--bg-panel);
+  border-right: 1px solid var(--border-color);
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Cards & Accordions */
+.card {
+  background-color: rgba(30, 41, 59, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: #64748b;
+}
+
+.card-header {
+  padding: 0.85rem 1.1rem;
+  background-color: rgba(51, 65, 85, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-header h3 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card-header h3 i {
+  color: var(--accent-cyan);
+}
+
+.toggle-icon {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: transform 0.25s ease;
+}
+
+.card.accordion:not(.active) .card-body {
+  display: none;
+}
+
+.card.accordion:not(.active) .toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.card-body {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+/* Form Controls */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+}
+
+.logo-upload-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--bg-dark);
+  border: 1px dashed var(--border-color);
+  padding: 0.6rem;
+  border-radius: 8px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* Flight Segment Card inside Editor */
+.segment-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.9rem;
+  margin-bottom: 0.85rem;
+  position: relative;
+}
+
+.segment-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.segment-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+
+}
+
+.layover-box {
+  margin-top: 0.75rem;
+  background: rgba(51, 65, 85, 0.4);
+  border-left: 3px solid var(--accent-cyan);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 6px 6px 0;
+}
+
+/* ==========================================
+   RIGHT PANEL: LIVE A4 PREVIEW
+   ========================================== */
+.preview-panel {
+  background-color: #0b0f19;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.preview-toolbar {
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.zoom-controls button {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.zoom-controls button:hover {
+  background: var(--border-color);
+}
+
+.preview-viewport {
+  flex: 1;
+  overflow: auto;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ==========================================
+   A4 DOCUMENT TICKET SHEET (EXACT TARGET PDF)
+   ========================================== */
+.a4-sheet {
+  width: 210mm;
+  min-height: 297mm;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 18mm 16mm;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Document Header Layout */
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.2rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.doc-logo-wrapper {
+  width: 75px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.default-logo {
+  width: 100%;
+  height: 100%;
+}
+
+.doc-logo-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.doc-logo-img.hidden {
+  display: none;
+}
+
+.logo-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-brand-text #doc-brand-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #d32f2f;
+}
+
+.logo-brand-text #doc-brand-sub {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #555555;
+  letter-spacing: 0.2em;
+}
+
+.header-right {
+  text-align: right;
+  font-size: 0.78rem;
+  color: #000000;
+  line-height: 1.35;
+}
+
+.header-right h2 {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 2px;
+}
+
+.header-right .sub-agency {
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.header-right .address-text,
+.header-right .mobile-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Itinerary Title */
+.doc-title-wrapper {
+  text-align: center;
+  margin-bottom: 1.6rem;
+}
+
+.doc-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ff0000;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Document Sections & Tables */
+.doc-section {
+  margin-bottom: 1.25rem;
+}
+
+.table-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.85rem;
+}
+
+.doc-table th,
+.doc-table td {
+  border: 1px solid #000000;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-family: Arial, Helvetica, sans-serif;
+  vertical-align: middle;
+}
+
+/* Theme Color Variable Controls */
+.a4-sheet.theme-cyan .doc-table th {
+  background-color: var(--theme-cyan-header);
+  color: var(--theme-cyan-text);
+  font-weight: 800;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.a4-sheet.theme-navy .doc-table th {
+  background-color: var(--theme-navy-header);
+  color: var(--theme-navy-text);
+  font-weight: 800;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.a4-sheet.theme-emerald .doc-table th {
+  background-color: var(--theme-emerald-header);
+  color: var(--theme-emerald-text);
+  font-weight: 800;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.a4-sheet.theme-crimson .doc-table th {
+  background-color: var(--theme-crimson-header);
+  color: var(--theme-crimson-text);
+  font-weight: 800;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.doc-table td {
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+}
+
+.doc-table td.font-bold {
+  font-weight: 800;
+}
+
+.doc-table td.text-left {
+  text-align: left;
+}
+
+/* Flight Segment Table Details */
+.flight-info-cell {
+  text-align: left !important;
+  font-size: 0.73rem !important;
+  line-height: 1.45 !important;
+  padding: 6px 10px !important;
+}
+
+.flight-info-row {
+  display: flex;
+  gap: 4px;
+}
+
+.flight-info-key {
+  font-weight: 800;
+  min-width: 80px;
+}
+
+.flight-info-val {
+  font-weight: 700;
+}
+
+/* Layover Stop Banner */
+.doc-layover-bar {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #000000;
+  margin: 0.75rem 0 1rem 0;
+  border-radius: 2px;
+}
+
+/* Ticket Footer */
+.doc-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.barcode-container {
+  height: 45px;
+}
+
+#pnr-barcode {
+  height: 45px;
+  max-width: 200px;
+}
+
+.notice-text {
+  font-size: 0.65rem;
+  color: #64748b;
+  text-align: right;
+  line-height: 1.3;
+}
+
+/* ==========================================
+   PRINT SPECIFIC STYLES (@media print)
+   ========================================== */
+@media print {
+  body {
+    background: none !important;
+    color: #000 !important;
+  }
+
+  .app-header,
+  .editor-panel,
+  .preview-toolbar {
+    display: none !important;
+  }
+
+  .studio-container {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .preview-panel {
+    background: none !important;
+    overflow: visible !important;
+  }
+
+  .preview-viewport {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .a4-sheet {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    padding: 10mm 12mm !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}

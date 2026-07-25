@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Air Ticket Itinerary PDF Generator - Travel Agency Studio</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2pdf.js & JsBarcode -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- APP NAVBAR -->
+  <header class="app-header">
+    <div class="brand">
+      <i class="fa-solid fa-plane-departure brand-icon"></i>
+      <div>
+        <h1>AirTicket Pro Studio</h1>
+        <p>Travel Agency Itinerary PDF Generator</p>
+      </div>
+    </div>
+    
+    <div class="actions">
+      <button id="btn-load-sample" class="btn btn-secondary">
+        <i class="fa-solid fa-rotate-left"></i> Load Sample Data
+      </button>
+      <button id="btn-clear-form" class="btn btn-ghost">
+        <i class="fa-solid fa-trash-can"></i> Clear Form
+      </button>
+      <div class="theme-picker">
+        <label><i class="fa-solid fa-palette"></i> Table Theme:</label>
+        <select id="theme-select">
+          <option value="theme-cyan" selected>Cyan (Original)</option>
+          <option value="theme-navy">Royal Navy</option>
+          <option value="theme-emerald">Emerald Green</option>
+          <option value="theme-crimson">Crimson Red</option>
+        </select>
+      </div>
+      <button id="btn-print" class="btn btn-primary">
+        <i class="fa-solid fa-print"></i> Print Ticket
+      </button>
+      <button id="btn-download-pdf" class="btn btn-accent">
+        <i class="fa-solid fa-file-pdf"></i> Download PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN STUDIO CONTAINER -->
+  <main class="studio-container">
+    
+    <!-- LEFT PANEL: CONTROLS FORM -->
+    <section class="editor-panel">
+      
+      <!-- Accordion 1: Agency Branding -->
+      <div class="card accordion active">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-building-user"></i> Agency Header Details</h3>
+          <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="card-body">
+          <div class="form-group full-width">
+            <label>Agency Logo (Image Upload / Default):</label>
+            <div class="logo-upload-box">
+              <input type="file" id="agency-logo-file" accept="image/*" class="file-input">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="document.getElementById('agency-logo-file').click()">
+                <i class="fa-solid fa-upload"></i> Upload Logo
+              </button>
+              <button type="button" id="btn-reset-logo" class="btn btn-sm btn-ghost">
+                Reset Logo
+              </button>
+              <span id="logo-file-name" class="file-hint">Default Tanvir Air Logo</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="agency-name">Business Name</label>
+              <input type="text" id="agency-name" placeholder="e.g. Tanvir Air Travels">
+            </div>
+            <div class="form-group">
+              <label for="agency-tagline">Tagline / Reg Text</label>
+              <input type="text" id="agency-tagline" placeholder="e.g. -Govt. Approved Travel Agent.">
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="agency-address">Office Address</label>
+            <textarea id="agency-address" rows="2" placeholder="Street, Market, City, Country"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="agency-mobile1">Mobile / Phone 1</label>
+              <input type="text" id="agency-mobile1" placeholder="e.g. +88 01761-953000">
+            </div>
+            <div class="form-group">
+              <label for="agency-mobile2">Mobile / Phone 2</label>
+              <input type="text" id="agency-mobile2" placeholder="e.g. +88 01304-222233">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 2: Passenger Information -->
+      <div class="card accordion active">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-user-tag"></i> Passenger Information</h3>
+          <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pass-name">Passenger Name</label>
+              <input type="text" id="pass-name" placeholder="FULL NAME (e.g. BILAL HOSSAN)">
+            </div>
+            <div class="form-group">
+              <label for="pass-passport">Passport Number</label>
+              <input type="text" id="pass-passport" placeholder="e.g. A22042921">
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="pass-mobile">Mobile Number</label>
+            <input type="text" id="pass-mobile" placeholder="e.g. +88 01700-000000">
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 3: Booking & Ticket Details -->
+      <div class="card accordion active">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-ticket"></i> Booking & Ticket Details</h3>
+          <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ticket-pnr">PNR Code</label>
+              <input type="text" id="ticket-pnr" placeholder="e.g. PBQU7T">
+            </div>
+            <div class="form-group">
+              <label for="ticket-number">Air Ticket Number</label>
+              <input type="text" id="ticket-number" placeholder="e.g. 779-1234567890 or -">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ticket-date">Date of Issue</label>
+              <input type="text" id="ticket-date" placeholder="e.g. 25 July 2026">
+            </div>
+            <div class="form-group">
+              <label for="ticket-checkin">Check-in Status</label>
+              <input type="text" id="ticket-checkin" placeholder="e.g. Web Check-in Available">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 4: Flight Segments -->
+      <div class="card accordion active">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-plane"></i> Flight Segments</h3>
+          <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="card-body">
+          <div id="flight-segments-container">
+            <!-- Dynamic Flight Cards Injected by JS -->
+          </div>
+          <button type="button" id="btn-add-segment" class="btn btn-secondary full-width margin-top">
+            <i class="fa-solid fa-plus"></i> Add Another Flight Segment
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT PANEL: REAL-TIME A4 TICKET PREVIEW -->
+    <section class="preview-panel">
+      <div class="preview-toolbar">
+        <span><i class="fa-solid fa-eye"></i> Live A4 Print Preview</span>
+        <div class="zoom-controls">
+          <button id="btn-zoom-out" title="Zoom Out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+          <span id="zoom-level">100%</span>
+          <button id="btn-zoom-in" title="Zoom In"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+          <button id="btn-zoom-reset" title="Reset Zoom"><i class="fa-solid fa-rotate"></i></button>
+        </div>
+      </div>
+
+      <div class="preview-viewport">
+        <!-- A4 SHEET PREVIEW -->
+        <div id="ticket-document" class="a4-sheet theme-cyan">
+          
+          <!-- TICKET HEADER -->
+          <header class="doc-header">
+            <!-- Header Left: Logo -->
+            <div class="header-left">
+              <div id="doc-logo-container" class="doc-logo-wrapper">
+                <svg id="default-logo-svg" class="default-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M50 10 C30 10 15 30 15 50 C15 70 30 90 50 90 C70 90 85 70 85 50 C85 30 70 10 50 10 Z" fill="#e53935"/>
+                  <path d="M50 20 L58 42 L80 42 L62 55 L69 76 L50 64 L31 76 L38 55 L20 42 L42 42 Z" fill="#ffffff"/>
+                </svg>
+                <img id="doc-logo-img" class="doc-logo-img hidden" src="" alt="Agency Logo">
+              </div>
+              <div class="logo-brand-text">
+                <span id="doc-brand-title">Tanvir Air</span>
+                <span id="doc-brand-sub">TRAVELS</span>
+              </div>
+            </div>
+
+            <!-- Header Right: Business Info -->
+            <div class="header-right">
+              <h2 id="doc-agency-name">Tanvir Air Travels</h2>
+              <p id="doc-agency-tagline" class="sub-agency">-Govt. Approved Travel Agent.</p>
+              <p id="doc-agency-address" class="address-text">ADDRESS : Sharno Market (2nd Floor), Dollai Nowabpur,<br>Chandina, Comilla, Bangladesh.</p>
+              <p id="doc-agency-mobile" class="mobile-text">MOBILE : +88 01761-953000<br>+88 01304-222233</p>
+            </div>
+          </header>
+
+          <!-- ITINERARY TITLE -->
+          <div class="doc-title-wrapper">
+            <h1 class="doc-title">ITINERARY</h1>
+          </div>
+
+          <!-- TABLE 1: PASSENGER INFORMATION -->
+          <div class="doc-section">
+            <div class="table-label">PASSENGER INFORMATION</div>
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th style="width: 45%;">PASSENGER NAME</th>
+                  <th style="width: 30%;">PASSPORT NUMBER</th>
+                  <th style="width: 25%;">MOBILE NUMBER</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="doc-pass-name" class="font-bold">BILAL HOSSAN</td>
+                  <td id="doc-pass-passport">A22042921</td>
+                  <td id="doc-pass-mobile"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TABLE 2: BOOKING DETAILS -->
+          <div class="doc-section">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">PNR</th>
+                  <th style="width: 30%;">AIR TICKET NUMBER</th>
+                  <th style="width: 25%;">DATE OF ISSUE</th>
+                  <th style="width: 20%;">Check-in</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="doc-ticket-pnr" class="font-bold">PBQU7T</td>
+                  <td id="doc-ticket-number">-</td>
+                  <td id="doc-ticket-date">25 July 2026</td>
+                  <td id="doc-ticket-checkin"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- DYNAMIC FLIGHT SEGMENTS CONTAINER -->
+          <div id="doc-flights-container">
+            <!-- Flight tables and layover stops rendered dynamically -->
+          </div>
+
+          <!-- TICKET FOOTER / WATERMARK -->
+          <footer class="doc-footer">
+            <div class="barcode-container">
+              <svg id="pnr-barcode"></svg>
+            </div>
+            <div class="notice-text">
+              <p>* Please check flight timings with airline 24 hours prior to departure.</p>
+              <p>* Carry a valid passport with at least 6 months validity & required visa documents.</p>
+            </div>
+          </footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
