@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         arriveTime: "15:10",
         baggage: "30 KG",
         travelClass: "ECONOMY",
-        duration: "",
+        duration: "02h 05m",
         food: "NO",
         status: "CONFIRM",
         layoverStop: "01 stop (02 Hours 30 Minutes in HYD)"
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         arriveTime: "20:50",
         baggage: "30 KG",
         travelClass: "ECONOMY",
-        duration: "",
+        duration: "03h 10m",
         food: "YES",
         status: "CONFIRM",
         layoverStop: ""
@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // APPLICATION STATE
   let state = JSON.parse(JSON.stringify(sampleData));
   let zoomLevel = 1.0;
+  let currentLayout = 'layout-luxury'; // 'layout-luxury' | 'layout-modern' | 'layout-classic'
+  let currentTheme = 'theme-modern-blue';
 
   // DOM ELEMENTS - INPUTS
   const agencyNameInput = document.getElementById('agency-name');
@@ -84,28 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAddSegment = document.getElementById('btn-add-segment');
 
   // DOM ELEMENTS - PREVIEW DOCUMENT
-  const docAgencyName = document.getElementById('doc-agency-name');
-  const docAgencyTagline = document.getElementById('doc-agency-tagline');
-  const docAgencyAddress = document.getElementById('doc-agency-address');
-  const docAgencyMobile = document.getElementById('doc-agency-mobile');
-  const docLogoSvg = document.getElementById('default-logo-svg');
-  const docLogoImg = document.getElementById('doc-logo-img');
-
-  const docPassName = document.getElementById('doc-pass-name');
-  const docPassPassport = document.getElementById('doc-pass-passport');
-  const docPassMobile = document.getElementById('doc-pass-mobile');
-
-  const docTicketPnr = document.getElementById('doc-ticket-pnr');
-  const docTicketNumber = document.getElementById('doc-ticket-number');
-  const docTicketDate = document.getElementById('doc-ticket-date');
-  const docTicketCheckin = document.getElementById('doc-ticket-checkin');
-
-  const docFlightsContainer = document.getElementById('doc-flights-container');
   const ticketDocument = document.getElementById('ticket-document');
 
-  // ACTION BUTTONS & THEME SELECTOR
+  // ACTION BUTTONS & SELECTORS
   const btnLoadSample = document.getElementById('btn-load-sample');
   const btnClearForm = document.getElementById('btn-clear-form');
+  const layoutSelect = document.getElementById('layout-select');
   const themeSelect = document.getElementById('theme-select');
   const btnPrint = document.getElementById('btn-print');
   const btnDownloadPdf = document.getElementById('btn-download-pdf');
@@ -148,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFlightSegmentInputs();
   }
 
-  // RENDER DYNAMIC FLIGHT FORM CARDS
+  // RENDER DYNAMIC FLIGHT FORM CARDS IN EDITOR
   function renderFlightSegmentInputs() {
     flightsContainer.innerHTML = '';
 
@@ -165,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="form-row">
           <div class="form-group full-width">
-            <label>Flight # & Airline</label>
+            <label>Flight # & Airline Name</label>
             <input type="text" class="input-seg-flight" data-id="${seg.id}" value="${seg.flightNo}" placeholder="e.g. INDIGO (6E 1118)">
           </div>
         </div>
@@ -207,10 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="form-row margin-top-xs">
           <div class="form-group">
+            <label>Flight Duration</label>
+            <input type="text" class="input-seg-duration" data-id="${seg.id}" value="${seg.duration || ''}" placeholder="e.g. 02h 05m">
+          </div>
+          <div class="form-group">
             <label>Food / Meals</label>
             <input type="text" class="input-seg-food" data-id="${seg.id}" value="${seg.food}" placeholder="e.g. NO / YES">
           </div>
-          <div class="form-group">
+        </div>
+
+        <div class="form-row margin-top-xs">
+          <div class="form-group full-width">
             <label>Booking Status</label>
             <input type="text" class="input-seg-status" data-id="${seg.id}" value="${seg.status}" placeholder="e.g. CONFIRM">
           </div>
@@ -218,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="layover-box margin-top-xs">
           <div class="form-group full-width">
-            <label>Layover / Connection Stop Info (Optional)</label>
+            <label>Layover / Connection Stop Details (Optional)</label>
             <input type="text" class="input-seg-layover" data-id="${seg.id}" value="${seg.layoverStop || ''}" placeholder="e.g. 01 stop (02 Hours 30 Minutes in HYD)">
           </div>
         </div>
@@ -261,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('input-seg-arrive-time')) updateSegField(id, 'arriveTime', e.target.value);
         if (e.target.classList.contains('input-seg-baggage')) updateSegField(id, 'baggage', e.target.value);
         if (e.target.classList.contains('input-seg-class')) updateSegField(id, 'travelClass', e.target.value);
+        if (e.target.classList.contains('input-seg-duration')) updateSegField(id, 'duration', e.target.value);
         if (e.target.classList.contains('input-seg-food')) updateSegField(id, 'food', e.target.value);
         if (e.target.classList.contains('input-seg-status')) updateSegField(id, 'status', e.target.value);
         if (e.target.classList.contains('input-seg-layover')) updateSegField(id, 'layoverStop', e.target.value);
@@ -319,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         arriveTime: '15:00',
         baggage: '30 KG',
         travelClass: 'ECONOMY',
-        duration: '',
+        duration: '03h 00m',
         food: 'YES',
         status: 'CONFIRM',
         layoverStop: ''
@@ -376,8 +370,14 @@ document.addEventListener('DOMContentLoaded', () => {
       renderPreview();
     };
 
+    layoutSelect.onchange = (e) => {
+      currentLayout = e.target.value;
+      renderPreview();
+    };
+
     themeSelect.onchange = (e) => {
-      ticketDocument.className = `a4-sheet ${e.target.value}`;
+      currentTheme = e.target.value;
+      renderPreview();
     };
 
     btnPrint.onclick = () => {
@@ -426,50 +426,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // RENDER LIVE A4 TICKET PREVIEW
+  // RENDER PREVIEW DOCUMENT (V1 CLASSIC vs V2 MODERN vs V3 LUXURY)
   function renderPreview() {
-    // Agency Header
-    docAgencyName.textContent = state.agencyName || 'Agency Business Name';
-    docAgencyTagline.textContent = state.agencyTagline || '';
-    
-    // Address with linebreaks
-    const addr = state.agencyAddress || '';
-    docAgencyAddress.innerHTML = addr.startsWith('ADDRESS :') ? addr.replace(/\n/g, '<br>') : `ADDRESS : ${addr.replace(/\n/g, '<br>')}`;
-    
-    // Mobile numbers
+    ticketDocument.className = `a4-sheet ${currentTheme} ${currentLayout}`;
+
+    // Logo HTML helper (ONLY THE LOGO IMAGE / ICON IS DISPLAYED)
+    const logoHtml = state.logoDataUrl
+      ? `<img class="doc-logo-img" src="${state.logoDataUrl}" alt="Agency Logo">`
+      : `<svg class="default-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 10 C30 10 15 30 15 50 C15 70 30 90 50 90 C70 90 85 70 85 50 C85 30 70 10 50 10 Z" fill="#dc2626"/>
+          <path d="M50 20 L58 42 L80 42 L62 55 L69 76 L50 64 L31 76 L38 55 L20 42 L42 42 Z" fill="#ffffff"/>
+         </svg>`;
+
+    // Format mobile string
     let mobText = '';
     if (state.agencyMobile1) mobText += state.agencyMobile1;
     if (state.agencyMobile2) mobText += (mobText ? '<br>' : '') + state.agencyMobile2;
-    docAgencyMobile.innerHTML = mobText ? (mobText.startsWith('MOBILE :') ? mobText : `MOBILE : ${mobText}`) : '';
 
-    // Logo
-    if (state.logoDataUrl) {
-      docLogoImg.src = state.logoDataUrl;
-      docLogoImg.classList.remove('hidden');
-      docLogoSvg.style.display = 'none';
+    if (currentLayout === 'layout-classic') {
+      renderClassicLayout(logoHtml, mobText);
+    } else if (currentLayout === 'layout-modern') {
+      renderModernLayout(logoHtml, mobText);
     } else {
-      docLogoImg.classList.add('hidden');
-      docLogoSvg.style.display = 'block';
+      renderLuxuryLayout(logoHtml, mobText);
     }
 
-    // Passenger Info
-    docPassName.textContent = state.passengerName || '';
-    docPassPassport.textContent = state.passportNumber || '';
-    docPassMobile.textContent = state.passengerMobile || '';
-
-    // Ticket Booking Details
-    docTicketPnr.textContent = state.pnr || '';
-    docTicketNumber.textContent = state.airTicketNumber || '';
-    docTicketDate.textContent = state.dateOfIssue || '';
-    docTicketCheckin.textContent = state.checkInStatus || '';
-
-    // Barcode Generator
+    // Render Barcode
     try {
       if (state.pnr && window.JsBarcode) {
         JsBarcode("#pnr-barcode", state.pnr, {
           format: "CODE128",
           width: 1.5,
-          height: 35,
+          height: 38,
           displayValue: true,
           fontSize: 10,
           margin: 0
@@ -478,57 +466,456 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.warn("Barcode render error:", err);
     }
+  }
 
-    // Render Flight Segments Tables
-    docFlightsContainer.innerHTML = '';
+  // RENDER VERSION 1: CLASSIC TABLE LAYOUT (PROMPT ORIGINAL MATCH)
+  function renderClassicLayout(logoHtml, mobText) {
+    const addr = state.agencyAddress || '';
+    const formattedAddr = addr.startsWith('ADDRESS :') ? addr.replace(/\n/g, '<br>') : `ADDRESS : ${addr.replace(/\n/g, '<br>')}`;
+    const formattedMob = mobText ? (mobText.startsWith('MOBILE :') ? mobText : `MOBILE : ${mobText}`) : '';
 
+    let flightsTableHtml = '';
     state.segments.forEach(seg => {
-      const segWrapper = document.createElement('div');
-      segWrapper.className = 'doc-section';
-
-      // Parse Flight # with line breaks if provided
       const flightFormatted = (seg.flightNo || '').replace(/\n/g, '<br>');
+      flightsTableHtml += `
+        <div class="doc-section">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width: 20%;">FLIGHT #</th>
+                <th style="width: 15%;">FROM</th>
+                <th style="width: 15%;">TO</th>
+                <th style="width: 16%;">DEPART</th>
+                <th style="width: 16%;">ARRIVE</th>
+                <th style="width: 18%;">INFO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-bold">${flightFormatted}</td>
+                <td class="font-bold">${seg.from || ''}</td>
+                <td class="font-bold">${seg.to || ''}</td>
+                <td>
+                  <div class="font-bold">${seg.departDate || ''}</div>
+                  <div>${seg.departTime || ''}</div>
+                </td>
+                <td>
+                  <div class="font-bold">${seg.arriveDate || ''}</div>
+                  <div>${seg.arriveTime || ''}</div>
+                </td>
+                <td class="flight-info-cell">
+                  <div class="flight-info-row"><span class="flight-info-key">BAGGAGE :</span> <span class="flight-info-val">${seg.baggage || ''}</span></div>
+                  <div class="flight-info-row"><span class="flight-info-key">CLASS :</span> <span class="flight-info-val">${seg.travelClass || ''}</span></div>
+                  <div class="flight-info-row"><span class="flight-info-key">DURATION :</span> <span class="flight-info-val">${seg.duration || ''}</span></div>
+                  <div class="flight-info-row"><span class="flight-info-key">FOOD :</span> <span class="flight-info-val">${seg.food || ''}</span></div>
+                  <div class="flight-info-row"><span class="flight-info-key">STATUS :</span> <span class="flight-info-val">${seg.status || ''}</span></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          ${seg.layoverStop ? `<div class="doc-layover-bar">${seg.layoverStop}</div>` : ''}
+        </div>
+      `;
+    });
 
-      segWrapper.innerHTML = `
+    ticketDocument.innerHTML = `
+      <header class="doc-header classic-header">
+        <div class="header-left">
+          <div class="doc-logo-wrapper">
+            ${logoHtml}
+          </div>
+        </div>
+        <div class="header-right classic-right">
+          <h2>${state.agencyName || 'Tanvir Air Travels'}</h2>
+          <p class="sub-agency">${state.agencyTagline || '-Govt. Approved Travel Agent.'}</p>
+          <p class="address-text">${formattedAddr}</p>
+          <p class="mobile-text">${formattedMob}</p>
+        </div>
+      </header>
+
+      <div class="doc-title-wrapper">
+        <h1 class="doc-title">ITINERARY</h1>
+      </div>
+
+      <div class="doc-section">
+        <div class="table-label">PASSENGER INFORMATION</div>
         <table class="doc-table">
           <thead>
             <tr>
-              <th style="width: 20%;">FLIGHT #</th>
-              <th style="width: 15%;">FROM</th>
-              <th style="width: 15%;">TO</th>
-              <th style="width: 16%;">DEPART</th>
-              <th style="width: 16%;">ARRIVE</th>
-              <th style="width: 18%;">INFO</th>
+              <th style="width: 45%;">PASSENGER NAME</th>
+              <th style="width: 30%;">PASSPORT NUMBER</th>
+              <th style="width: 25%;">MOBILE NUMBER</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="font-bold">${flightFormatted}</td>
-              <td class="font-bold">${seg.from || ''}</td>
-              <td class="font-bold">${seg.to || ''}</td>
-              <td>
-                <div class="font-bold">${seg.departDate || ''}</div>
-                <div>${seg.departTime || ''}</div>
-              </td>
-              <td>
-                <div class="font-bold">${seg.arriveDate || ''}</div>
-                <div>${seg.arriveTime || ''}</div>
-              </td>
-              <td class="flight-info-cell">
-                <div class="flight-info-row"><span class="flight-info-key">BAGGAGE :</span> <span class="flight-info-val">${seg.baggage || ''}</span></div>
-                <div class="flight-info-row"><span class="flight-info-key">CLASS :</span> <span class="flight-info-val">${seg.travelClass || ''}</span></div>
-                <div class="flight-info-row"><span class="flight-info-key">DURATION :</span> <span class="flight-info-val">${seg.duration || ''}</span></div>
-                <div class="flight-info-row"><span class="flight-info-key">FOOD :</span> <span class="flight-info-val">${seg.food || ''}</span></div>
-                <div class="flight-info-row"><span class="flight-info-key">STATUS :</span> <span class="flight-info-val">${seg.status || ''}</span></div>
-              </td>
+              <td class="font-bold">${state.passengerName || ''}</td>
+              <td>${state.passportNumber || ''}</td>
+              <td>${state.passengerMobile || ''}</td>
             </tr>
           </tbody>
         </table>
-        ${seg.layoverStop ? `<div class="doc-layover-bar">${seg.layoverStop}</div>` : ''}
-      `;
+      </div>
 
-      docFlightsContainer.appendChild(segWrapper);
+      <div class="doc-section">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">PNR</th>
+              <th style="width: 30%;">AIR TICKET NUMBER</th>
+              <th style="width: 25%;">DATE OF ISSUE</th>
+              <th style="width: 20%;">Check-in</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-bold">${state.pnr || ''}</td>
+              <td>${state.airTicketNumber || '-'}</td>
+              <td>${state.dateOfIssue || ''}</td>
+              <td>${state.checkInStatus || ''}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      ${flightsTableHtml}
+
+      <footer class="doc-footer">
+        <div class="barcode-container">
+          <svg id="pnr-barcode"></svg>
+        </div>
+        <div class="notice-text">
+          <p>* Please check flight timings with airline 24 hours prior to departure.</p>
+          <p>* Carry a valid passport with at least 6 months validity & required visa documents.</p>
+        </div>
+      </footer>
+    `;
+  }
+
+  // RENDER VERSION 2: MODERN E-TICKET LAYOUT
+  function renderModernLayout(logoHtml, mobText) {
+    const addr = state.agencyAddress || '';
+    const cleanAddr = addr.replace(/ADDRESS\s*:\s*/i, '');
+    const cleanMob = mobText.replace(/MOBILE\s*:\s*/i, '').replace(/<br>/g, ' | ');
+
+    let flightCardsHtml = '';
+    state.segments.forEach(seg => {
+      flightCardsHtml += `
+        <div class="flight-segment-block">
+          <div class="flight-card">
+            <div class="flight-card-header">
+              <div class="airline-badge">
+                <i class="fa-solid fa-plane"></i>
+                <span>${seg.flightNo || 'FLIGHT'}</span>
+              </div>
+              <span class="status-badge-sm">${seg.status || 'CONFIRM'}</span>
+            </div>
+
+            <div class="flight-card-body">
+              <div class="route-node depart">
+                <span class="airport-code">${seg.from || '---'}</span>
+                <span class="time-str">${seg.departTime || ''}</span>
+                <span class="date-str">${seg.departDate || ''}</span>
+              </div>
+
+              <div class="route-timeline">
+                <div class="timeline-line">
+                  <div class="plane-icon-wrapper">
+                    <i class="fa-solid fa-plane"></i>
+                  </div>
+                </div>
+                <span class="duration-tag">${seg.duration ? seg.duration : 'Direct'}</span>
+              </div>
+
+              <div class="route-node arrive">
+                <span class="airport-code">${seg.to || '---'}</span>
+                <span class="time-str">${seg.arriveTime || ''}</span>
+                <span class="date-str">${seg.arriveDate || ''}</span>
+              </div>
+            </div>
+
+            <div class="flight-card-footer">
+              <div class="badge-item">
+                <i class="fa-solid fa-suitcase"></i>
+                <span class="badge-key">Baggage:</span>
+                <span class="badge-val">${seg.baggage || '-'}</span>
+              </div>
+              <div class="badge-item">
+                <i class="fa-solid fa-chair"></i>
+                <span class="badge-key">Class:</span>
+                <span class="badge-val">${seg.travelClass || '-'}</span>
+              </div>
+              <div class="badge-item">
+                <i class="fa-solid fa-utensils"></i>
+                <span class="badge-key">Meal:</span>
+                <span class="badge-val">${seg.food || '-'}</span>
+              </div>
+              <div class="badge-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span class="badge-key">Status:</span>
+                <span class="badge-val">${seg.status || '-'}</span>
+              </div>
+            </div>
+          </div>
+
+          ${seg.layoverStop ? `
+            <div class="layover-bar">
+              <i class="fa-solid fa-clock"></i>
+              <span>${seg.layoverStop}</span>
+            </div>
+          ` : ''}
+        </div>
+      `;
     });
+
+    ticketDocument.innerHTML = `
+      <div class="doc-accent-bar"></div>
+
+      <header class="doc-header">
+        <div class="header-left">
+          <div class="doc-logo-wrapper">
+            ${logoHtml}
+          </div>
+        </div>
+
+        <div class="header-right">
+          <h2>${state.agencyName || 'Tanvir Air Travels'}</h2>
+          <p class="sub-agency">${state.agencyTagline || '-Govt. Approved Travel Agent.'}</p>
+          <div class="contact-details">
+            <p class="address-text"><i class="fa-solid fa-location-dot"></i> ${cleanAddr}</p>
+            <p class="mobile-text"><i class="fa-solid fa-phone"></i> ${cleanMob}</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="doc-title-bar">
+        <div class="title-left">
+          <h1 class="doc-title">FLIGHT ITINERARY RECEIPT</h1>
+          <span class="doc-badge"><i class="fa-solid fa-circle-check"></i> CONFIRMED E-TICKET</span>
+        </div>
+        <div class="pnr-badge-box">
+          <span class="pnr-label">BOOKING REFERENCE (PNR)</span>
+          <span class="pnr-value">${state.pnr || '------'}</span>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-header"><i class="fa-solid fa-user"></i> PASSENGER DETAILS</div>
+          <div class="info-card-body">
+            <div class="info-pair">
+              <span class="info-key">Passenger Name</span>
+              <span class="info-val highlight">${state.passengerName || '-'}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Passport Number</span>
+              <span class="info-val">${state.passportNumber || '-'}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Mobile Number</span>
+              <span class="info-val">${state.passengerMobile || '-'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header"><i class="fa-solid fa-ticket"></i> TICKET DETAILS</div>
+          <div class="info-card-body">
+            <div class="info-pair">
+              <span class="info-key">Air Ticket No</span>
+              <span class="info-val">${state.airTicketNumber || '-'}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Date of Issue</span>
+              <span class="info-val">${state.dateOfIssue || '-'}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Check-in Status</span>
+              <span class="info-val">${state.checkInStatus || '-'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-heading">
+        <i class="fa-solid fa-plane-departure"></i> FLIGHT ITINERARY & DEPARTURE DETAILS
+      </div>
+
+      ${flightCardsHtml}
+
+      <footer class="doc-footer">
+        <div class="footer-left">
+          <div class="barcode-box">
+            <svg id="pnr-barcode"></svg>
+          </div>
+        </div>
+        <div class="footer-right">
+          <ul class="notice-list">
+            <li><i class="fa-solid fa-info-circle"></i> Check-in closes 60 minutes prior to scheduled flight departure.</li>
+            <li><i class="fa-solid fa-id-card"></i> Carry valid Passport, Visa & Govt. Photo ID during entire travel.</li>
+            <li><i class="fa-solid fa-headset"></i> For baggage policy or itinerary changes, contact agency helpline.</li>
+          </ul>
+        </div>
+      </footer>
+    `;
+  }
+
+  // RENDER VERSION 3: LUXURY EXECUTIVE PASS LAYOUT ("LOVE AT FIRST SIGHT")
+  function renderLuxuryLayout(logoHtml, mobText) {
+    const addr = state.agencyAddress || '';
+    const cleanAddr = addr.replace(/ADDRESS\s*:\s*/i, '').replace(/\n/g, ', ');
+    const cleanMob = mobText.replace(/MOBILE\s*:\s*/i, '').replace(/<br>/g, '  •  ');
+
+    // Route summary from first origin to last destination
+    const originFirst = state.segments[0] ? state.segments[0].from : 'DAC';
+    const destLast = state.segments[state.segments.length - 1] ? state.segments[state.segments.length - 1].to : 'MED';
+
+    let luxuryFlightsHtml = '';
+    state.segments.forEach((seg, idx) => {
+      luxuryFlightsHtml += `
+        <div class="luxury-segment-card">
+          <div class="luxury-card-head">
+            <div class="airline-tag">
+              <i class="fa-solid fa-plane-up"></i>
+              <span>LEG 0${idx + 1} — ${seg.flightNo || 'FLIGHT'}</span>
+            </div>
+            <div class="status-pill">${seg.status || 'CONFIRMED'}</div>
+          </div>
+
+          <div class="luxury-card-body">
+            <div class="route-column left">
+              <span class="route-city">${seg.from || '---'}</span>
+              <span class="route-time">${seg.departTime || ''}</span>
+              <span class="route-date">${seg.departDate || ''}</span>
+            </div>
+
+            <div class="route-center">
+              <span class="duration-badge">${seg.duration ? seg.duration : 'Direct Flight'}</span>
+              <div class="flight-path-bar">
+                <span class="dot start"></span>
+                <span class="line"></span>
+                <i class="fa-solid fa-plane plane-fly"></i>
+                <span class="line"></span>
+                <span class="dot end"></span>
+              </div>
+            </div>
+
+            <div class="route-column right">
+              <span class="route-city">${seg.to || '---'}</span>
+              <span class="route-time">${seg.arriveTime || ''}</span>
+              <span class="route-date">${seg.arriveDate || ''}</span>
+            </div>
+          </div>
+
+          <div class="luxury-card-foot">
+            <div class="foot-pill"><i class="fa-solid fa-briefcase"></i> <span>BAGGAGE:</span> <strong>${seg.baggage || '-'}</strong></div>
+            <div class="foot-pill"><i class="fa-solid fa-couch"></i> <span>CLASS:</span> <strong>${seg.travelClass || '-'}</strong></div>
+            <div class="foot-pill"><i class="fa-solid fa-utensils"></i> <span>MEAL:</span> <strong>${seg.food || '-'}</strong></div>
+          </div>
+        </div>
+
+        ${seg.layoverStop ? `
+          <div class="luxury-layover-ribbon">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>${seg.layoverStop}</span>
+          </div>
+        ` : ''}
+      `;
+    });
+
+    ticketDocument.innerHTML = `
+      <!-- EXECUTIVE HEADER BANNER -->
+      <div class="luxury-header-banner">
+        <div class="luxury-banner-left">
+          <div class="doc-logo-wrapper">
+            ${logoHtml}
+          </div>
+          <div class="agency-title-group">
+            <h2 class="luxury-agency-name">${state.agencyName || 'Tanvir Air Travels'}</h2>
+            <p class="luxury-agency-sub">${state.agencyTagline || '-Govt. Approved Travel Agent.'}</p>
+          </div>
+        </div>
+
+        <div class="luxury-banner-right">
+          <div class="luxury-pnr-box">
+            <span class="pnr-caption">BOOKING REF / PNR</span>
+            <span class="pnr-code">${state.pnr || '------'}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT DECK STRIP -->
+      <div class="luxury-contact-deck">
+        <span><i class="fa-solid fa-location-dot"></i> ${cleanAddr}</span>
+        <span><i class="fa-solid fa-phone"></i> ${cleanMob}</span>
+      </div>
+
+      <!-- BOARDING PASS HERO CONTAINER -->
+      <div class="luxury-pass-hero">
+        <div class="hero-header">
+          <div class="pass-title">
+            <i class="fa-solid fa-passport"></i>
+            <span>EXECUTIVE ELECTRONIC ITINERARY</span>
+          </div>
+          <div class="verified-seal">
+            <i class="fa-solid fa-shield-halved"></i> VERIFIED E-TICKET
+          </div>
+        </div>
+
+        <!-- PASSENGER STUB SUMMARY -->
+        <div class="hero-passenger-deck">
+          <div class="deck-col">
+            <span class="deck-label">PASSENGER NAME</span>
+            <span class="deck-value highlight">${state.passengerName || '-'}</span>
+          </div>
+          <div class="deck-col">
+            <span class="deck-label">PASSPORT NO</span>
+            <span class="deck-value">${state.passportNumber || '-'}</span>
+          </div>
+          <div class="deck-col">
+            <span class="deck-label">AIR TICKET NO</span>
+            <span class="deck-value">${state.airTicketNumber || '-'}</span>
+          </div>
+          <div class="deck-col">
+            <span class="deck-label">DATE OF ISSUE</span>
+            <span class="deck-value">${state.dateOfIssue || '-'}</span>
+          </div>
+        </div>
+
+        <!-- HERO ROUTE SUMMARY BANNER -->
+        <div class="hero-route-strip">
+          <div class="hero-route-node">
+            <span class="hero-label">ORIGIN</span>
+            <span class="hero-code">${originFirst}</span>
+          </div>
+          <div class="hero-arrow-box">
+            <i class="fa-solid fa-plane-departure"></i>
+          </div>
+          <div class="hero-route-node text-right">
+            <span class="hero-label">DESTINATION</span>
+            <span class="hero-code">${destLast}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLIGHT LEGS SECTION -->
+      <div class="luxury-section-title">
+        <i class="fa-solid fa-route"></i> FLIGHT SCHEDULE & SEGMENT DETAILS
+      </div>
+
+      ${luxuryFlightsHtml}
+
+      <!-- LUXURY FOOTER -->
+      <footer class="luxury-footer">
+        <div class="barcode-side">
+          <svg id="pnr-barcode"></svg>
+        </div>
+        <div class="notice-side">
+          <p><i class="fa-solid fa-circle-info"></i> Please report at airline check-in counter at least 3 hours prior to international departures.</p>
+          <p><i class="fa-solid fa-id-card"></i> Carry government-approved passport and visa documents for security clearance.</p>
+        </div>
+      </footer>
+    `;
   }
 
   // HIGH-QUALITY PDF GENERATION

@@ -4,10 +4,10 @@
 
 :root {
   /* Studio Theme Dark Palette */
-  --bg-dark: #0f172a;
-  --bg-panel: #1e293b;
-  --bg-card: #334155;
-  --border-color: #475569;
+  --bg-dark: #0b0f19;
+  --bg-panel: #151d2a;
+  --bg-card: #1e293b;
+  --border-color: #334155;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --accent-primary: #2563eb;
@@ -17,17 +17,20 @@
   --accent-danger: #ef4444;
   
   /* Ticket Themes */
-  --theme-cyan-header: #00e5ff;
-  --theme-cyan-text: #000000;
+  --theme-blue-primary: #0284c7;
+  --theme-blue-dark: #0f172a;
   
-  --theme-navy-header: #1e3a8a;
-  --theme-navy-text: #ffffff;
-  
-  --theme-emerald-header: #047857;
-  --theme-emerald-text: #ffffff;
-  
-  --theme-crimson-header: #b91c1c;
-  --theme-crimson-text: #ffffff;
+  --theme-cyan-primary: #00e5ff;
+  --theme-cyan-dark: #006064;
+
+  --theme-navy-primary: #1e3a8a;
+  --theme-navy-dark: #1e1b4b;
+
+  --theme-emerald-primary: #047857;
+  --theme-emerald-dark: #064e3b;
+
+  --theme-crimson-primary: #b91c1c;
+  --theme-crimson-dark: #4c0519;
 }
 
 * {
@@ -94,7 +97,8 @@ body {
   gap: 0.75rem;
 }
 
-/* Theme Picker */
+/* Selectors */
+.layout-picker,
 .theme-picker {
   display: flex;
   align-items: center;
@@ -107,6 +111,7 @@ body {
   color: var(--text-muted);
 }
 
+.layout-picker select,
 .theme-picker select {
   background: transparent;
   color: var(--text-main);
@@ -116,6 +121,7 @@ body {
   outline: none;
 }
 
+.layout-picker select option,
 .theme-picker select option {
   background: var(--bg-panel);
   color: var(--text-main);
@@ -160,7 +166,7 @@ body {
   border: 1px solid var(--border-color);
 }
 .btn-secondary:hover {
-  background-color: #475569;
+  background-color: #334155;
 }
 
 .btn-ghost {
@@ -200,7 +206,7 @@ body {
    ========================================== */
 .studio-container {
   display: grid;
-  grid-template-columns: 480px 1fr;
+  grid-template-columns: 460px 1fr;
   flex: 1;
   height: calc(100vh - 65px);
   overflow: hidden;
@@ -351,7 +357,6 @@ body {
   border-radius: 8px;
   padding: 0.9rem;
   margin-bottom: 0.85rem;
-  position: relative;
 }
 
 .segment-card-header {
@@ -367,7 +372,6 @@ body {
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--accent-cyan);
-
 }
 
 .layover-box {
@@ -382,7 +386,7 @@ body {
    RIGHT PANEL: LIVE A4 PREVIEW
    ========================================== */
 .preview-panel {
-  background-color: #0b0f19;
+  background-color: #060911;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -420,94 +424,69 @@ body {
 .preview-viewport {
   flex: 1;
   overflow: auto;
-  padding: 2rem;
+  padding: 2.5rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
 }
 
 /* ==========================================
-   A4 DOCUMENT TICKET SHEET (EXACT TARGET PDF)
+   A4 DOCUMENT TICKET SHEET
    ========================================== */
 .a4-sheet {
   width: 210mm;
   min-height: 297mm;
   background-color: #ffffff;
-  color: #000000;
-  padding: 18mm 16mm;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #1e293b;
+  padding: 14mm 16mm;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
   transform-origin: top center;
   transition: transform 0.2s ease;
   display: flex;
   flex-direction: column;
+  position: relative;
   box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-/* Document Header Layout */
-.doc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 2.2rem;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
+/* Common Header Logo Sizing (CLEAN, PROPORTIONAL LOGO ONLY) */
 .doc-logo-wrapper {
-  width: 75px;
-  height: 75px;
+  max-width: 150px;
+  max-height: 85px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .default-logo {
-  width: 100%;
-  height: 100%;
+  width: 70px;
+  height: 70px;
 }
 
 .doc-logo-img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 150px;
+  max-height: 85px;
   object-fit: contain;
 }
 
-.doc-logo-img.hidden {
-  display: none;
-}
-
-.logo-brand-text {
+/* ==========================================
+   VERSION 1: CLASSIC TABLE STYLES
+   ========================================== */
+.a4-sheet.layout-classic .doc-header {
   display: flex;
-  flex-direction: column;
-  line-height: 1.1;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
 }
 
-.logo-brand-text #doc-brand-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #d32f2f;
-}
-
-.logo-brand-text #doc-brand-sub {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #555555;
-  letter-spacing: 0.2em;
-}
-
-.header-right {
+.a4-sheet.layout-classic .classic-right {
   text-align: right;
   font-size: 0.78rem;
   color: #000000;
   line-height: 1.35;
 }
 
-.header-right h2 {
+.a4-sheet.layout-classic .classic-right h2 {
   font-family: 'Times New Roman', Times, serif;
   font-size: 1.7rem;
   font-weight: 700;
@@ -515,170 +494,502 @@ body {
   margin-bottom: 2px;
 }
 
-.header-right .sub-agency {
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.header-right .address-text,
-.header-right .mobile-text {
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-/* Itinerary Title */
-.doc-title-wrapper {
-  text-align: center;
-  margin-bottom: 1.6rem;
-}
-
-.doc-title {
-  font-family: Arial, Helvetica, sans-serif;
+.a4-sheet.layout-classic .doc-title-wrapper { text-align: center; margin-bottom: 1.6rem; }
+.a4-sheet.layout-classic .doc-title {
+  font-family: Arial, sans-serif;
   font-size: 1.6rem;
   font-weight: 800;
   color: #ff0000;
-  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-/* Document Sections & Tables */
-.doc-section {
-  margin-bottom: 1.25rem;
-}
-
-.table-label {
-  font-family: Arial, Helvetica, sans-serif;
+.a4-sheet.layout-classic .doc-section { margin-bottom: 1.25rem; }
+.a4-sheet.layout-classic .table-label {
+  font-family: Arial, sans-serif;
   font-size: 0.72rem;
   font-weight: 800;
-  color: #000000;
+  color: #000;
   margin-bottom: 3px;
-  text-transform: uppercase;
 }
 
-.doc-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 0.85rem;
-}
-
-.doc-table th,
-.doc-table td {
-  border: 1px solid #000000;
+.a4-sheet.layout-classic .doc-table { width: 100%; border-collapse: collapse; margin-bottom: 0.85rem; }
+.a4-sheet.layout-classic .doc-table th,
+.a4-sheet.layout-classic .doc-table td {
+  border: 1px solid #000;
   padding: 6px 10px;
   font-size: 0.78rem;
-  font-family: Arial, Helvetica, sans-serif;
-  vertical-align: middle;
-}
-
-/* Theme Color Variable Controls */
-.a4-sheet.theme-cyan .doc-table th {
-  background-color: var(--theme-cyan-header);
-  color: var(--theme-cyan-text);
-  font-weight: 800;
-  text-align: center;
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-}
-
-.a4-sheet.theme-navy .doc-table th {
-  background-color: var(--theme-navy-header);
-  color: var(--theme-navy-text);
-  font-weight: 800;
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-.a4-sheet.theme-emerald .doc-table th {
-  background-color: var(--theme-emerald-header);
-  color: var(--theme-emerald-text);
-  font-weight: 800;
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-.a4-sheet.theme-crimson .doc-table th {
-  background-color: var(--theme-crimson-header);
-  color: var(--theme-crimson-text);
-  font-weight: 800;
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-.doc-table td {
-  background-color: #ffffff;
-  color: #000000;
+  font-family: Arial, sans-serif;
   text-align: center;
 }
 
-.doc-table td.font-bold {
-  font-weight: 800;
-}
+.a4-sheet.layout-classic.theme-cyan .doc-table th { background-color: var(--theme-cyan-primary); color: #000; font-weight: 800; }
+.a4-sheet.layout-classic.theme-modern-blue .doc-table th { background-color: var(--theme-blue-primary); color: #fff; font-weight: 800; }
+.a4-sheet.layout-classic.theme-navy .doc-table th { background-color: var(--theme-navy-primary); color: #fff; font-weight: 800; }
+.a4-sheet.layout-classic.theme-emerald .doc-table th { background-color: var(--theme-emerald-primary); color: #fff; font-weight: 800; }
+.a4-sheet.layout-classic.theme-crimson .doc-table th { background-color: var(--theme-crimson-primary); color: #fff; font-weight: 800; }
 
-.doc-table td.text-left {
-  text-align: left;
-}
-
-/* Flight Segment Table Details */
-.flight-info-cell {
-  text-align: left !important;
-  font-size: 0.73rem !important;
-  line-height: 1.45 !important;
-  padding: 6px 10px !important;
-}
-
-.flight-info-row {
-  display: flex;
-  gap: 4px;
-}
-
-.flight-info-key {
-  font-weight: 800;
-  min-width: 80px;
-}
-
-.flight-info-val {
-  font-weight: 700;
-}
-
-/* Layover Stop Banner */
-.doc-layover-bar {
+.a4-sheet.layout-classic .flight-info-cell { text-align: left !important; font-size: 0.73rem !important; }
+.a4-sheet.layout-classic .flight-info-row { display: flex; gap: 4px; }
+.a4-sheet.layout-classic .flight-info-key { font-weight: 800; min-width: 80px; }
+.a4-sheet.layout-classic .doc-layover-bar {
   background-color: #f1f5f9;
   border: 1px solid #cbd5e1;
   padding: 6px 12px;
   text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.85rem;
   font-weight: 800;
-  color: #000000;
   margin: 0.75rem 0 1rem 0;
-  border-radius: 2px;
 }
 
-/* Ticket Footer */
-.doc-footer {
-  margin-top: auto;
-  padding-top: 1.5rem;
-  border-top: 1px dashed #cbd5e1;
+/* ==========================================
+   VERSION 2: MODERN E-TICKET STYLES
+   ========================================== */
+.a4-sheet.layout-modern .doc-accent-bar { height: 6px; width: 100%; margin-bottom: 1.2rem; border-radius: 4px; }
+.a4-sheet.layout-modern .doc-header { display: flex; justify-content: space-between; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; margin-bottom: 1.2rem; align-items: center; }
+.a4-sheet.layout-modern .header-right { text-align: right; }
+.a4-sheet.layout-modern .header-right h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.45rem; font-weight: 800; color: #0f172a; }
+
+.a4-sheet.layout-modern .doc-title-bar { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem 1.1rem; margin-bottom: 1.25rem; }
+.a4-sheet.layout-modern .doc-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 800; color: #0f172a; }
+.a4-sheet.layout-modern .doc-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; font-weight: 800; padding: 3px 8px; border-radius: 4px; background: #dcfce7; color: #15803d; }
+.a4-sheet.layout-modern .pnr-badge-box { display: flex; flex-direction: column; align-items: flex-end; background: #ffffff; border: 2px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; }
+.a4-sheet.layout-modern .pnr-value { font-family: 'Plus Jakarta Sans', monospace; font-size: 1.4rem; font-weight: 900; letter-spacing: 0.08em; }
+
+.a4-sheet.layout-modern .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+.a4-sheet.layout-modern .info-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+.a4-sheet.layout-modern .info-card-header { padding: 6px 12px; font-size: 0.72rem; font-weight: 800; display: flex; align-items: center; gap: 0.4rem; }
+.a4-sheet.layout-modern .info-card-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.a4-sheet.layout-modern .info-pair { display: flex; justify-content: space-between; font-size: 0.75rem; border-bottom: 1px dashed #f1f5f9; padding-bottom: 4px; }
+.a4-sheet.layout-modern .info-val.highlight { font-size: 0.82rem; font-weight: 800; }
+
+.a4-sheet.layout-modern .section-heading { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; color: #334155; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+.a4-sheet.layout-modern .flight-card { border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; margin-bottom: 1rem; background: #ffffff; }
+.a4-sheet.layout-modern .flight-card-header { padding: 8px 14px; display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 800; }
+.a4-sheet.layout-modern .flight-card-body { padding: 14px 18px; display: grid; grid-template-columns: 1fr 1.6fr 1fr; align-items: center; gap: 1rem; }
+.a4-sheet.layout-modern .airport-code { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 900; color: #0f172a; line-height: 1; }
+.a4-sheet.layout-modern .route-timeline { display: flex; flex-direction: column; align-items: center; position: relative; }
+.a4-sheet.layout-modern .timeline-line { width: 100%; height: 2px; background: #cbd5e1; position: relative; margin: 12px 0 4px 0; }
+.a4-sheet.layout-modern .plane-icon-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ffffff; padding: 0 6px; font-size: 0.95rem; }
+.a4-sheet.layout-modern .flight-card-footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 8px 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+.a4-sheet.layout-modern .badge-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; }
+.a4-sheet.layout-modern .layover-bar { display: flex; align-items: center; justify-content: center; gap: 0.6rem; background: #f1f5f9; border: 1px dashed #94a3b8; border-radius: 6px; padding: 6px 12px; margin: 0.75rem 0 1.25rem 0; font-size: 0.78rem; font-weight: 700; }
+
+.a4-sheet.layout-modern.theme-modern-blue .doc-accent-bar { background: linear-gradient(90deg, #0284c7, #0369a1); }
+.a4-sheet.layout-modern.theme-modern-blue .pnr-value { color: #0284c7; }
+.a4-sheet.layout-modern.theme-modern-blue .info-card-header { background: #f0f9ff; color: #0369a1; }
+.a4-sheet.layout-modern.theme-modern-blue .flight-card-header { background: #0284c7; color: #ffffff; }
+
+.a4-sheet.layout-modern.theme-cyan .doc-accent-bar { background: linear-gradient(90deg, #00e5ff, #00acc1); }
+.a4-sheet.layout-modern.theme-cyan .pnr-value { color: #00838f; }
+.a4-sheet.layout-modern.theme-cyan .info-card-header { background: #e0f7fa; color: #006064; }
+.a4-sheet.layout-modern.theme-cyan .flight-card-header { background: #00acc1; color: #ffffff; }
+
+.a4-sheet.layout-modern.theme-navy .doc-accent-bar { background: linear-gradient(90deg, #3b82f6, #1e1b4b); }
+.a4-sheet.layout-modern.theme-navy .pnr-value { color: #1e40af; }
+.a4-sheet.layout-modern.theme-navy .info-card-header { background: #eff6ff; color: #1e40af; }
+.a4-sheet.layout-modern.theme-navy .flight-card-header { background: #1e3a8a; color: #ffffff; }
+
+.a4-sheet.layout-modern.theme-emerald .doc-accent-bar { background: linear-gradient(90deg, #10b981, #047857); }
+.a4-sheet.layout-modern.theme-emerald .pnr-value { color: #047857; }
+.a4-sheet.layout-modern.theme-emerald .info-card-header { background: #ecfdf5; color: #064e3b; }
+.a4-sheet.layout-modern.theme-emerald .flight-card-header { background: #047857; color: #ffffff; }
+
+.a4-sheet.layout-modern.theme-crimson .doc-accent-bar { background: linear-gradient(90deg, #f43f5e, #be123c); }
+.a4-sheet.layout-modern.theme-crimson .pnr-value { color: #be123c; }
+.a4-sheet.layout-modern.theme-crimson .info-card-header { background: #fff1f2; color: #881337; }
+.a4-sheet.layout-modern.theme-crimson .flight-card-header { background: #be123c; color: #ffffff; }
+
+/* ==========================================
+   VERSION 3: LUXURY EXECUTIVE PASS STYLES ("LOVE AT FIRST SIGHT")
+   ========================================== */
+.a4-sheet.layout-luxury {
+  background-color: #fafafa;
+}
+
+/* Executive Header Banner */
+.luxury-header-banner {
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.luxury-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.agency-title-group h2 {
+  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.agency-title-group p {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.luxury-pnr-box {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 8px 16px;
+  text-align: right;
+}
+
+.luxury-pnr-box .pnr-caption {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+.luxury-pnr-box .pnr-code {
+  font-family: 'Plus Jakarta Sans', monospace;
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+}
+
+/* Contact Deck Strip */
+.luxury-contact-deck {
+  display: flex;
+  justify-content: space-between;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 1.2rem;
+}
+
+.luxury-contact-deck i { margin-right: 5px; color: #0284c7; }
+
+/* Executive Boarding Pass Hero Container */
+.luxury-pass-hero {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.25rem;
+}
+
+.hero-header {
+  padding: 8px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #334155;
+  letter-spacing: 0.05em;
+}
+
+.verified-seal {
+  background: #dcfce7;
+  color: #166534;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+}
+
+.hero-passenger-deck {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+  padding: 14px 16px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.deck-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-label {
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.deck-value {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.deck-value.highlight {
+  font-size: 1.05rem;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.hero-route-strip {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.hero-route-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.08em;
+}
+
+.hero-code {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.hero-arrow-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #0284c7;
+}
+
+/* Luxury Flight Segment Cards */
+.luxury-section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #334155;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.luxury-segment-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.luxury-card-head {
+  padding: 8px 16px;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.status-pill {
+  background: #10b981;
+  color: #ffffff;
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.luxury-card-body {
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.route-column { display: flex; flex-direction: column; }
+.route-column.right { text-align: right; }
+
+.route-city {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.route-time {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 3px;
+}
+
+.route-date {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.route-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.duration-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #0284c7;
+  background: #e0f2fe;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+}
+
+.flight-path-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flight-path-bar .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0284c7;
+}
+
+.flight-path-bar .line {
+  flex: 1;
+  height: 2px;
+  background: #cbd5e1;
+}
+
+.flight-path-bar .plane-fly {
+  color: #0284c7;
+  font-size: 1rem;
+}
+
+.luxury-card-foot {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.75rem;
+}
+
+.foot-pill span { color: #64748b; font-weight: 600; }
+.foot-pill strong { color: #0f172a; font-weight: 800; }
+
+.luxury-layover-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin: 0.5rem 0 1.25rem 0;
+}
+
+.luxury-footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Luxury Theme Color Adjustments */
+.a4-sheet.layout-luxury.theme-modern-blue .luxury-header-banner { background: linear-gradient(135deg, #0f172a, #0284c7); }
+.a4-sheet.layout-luxury.theme-modern-blue .deck-value.highlight { color: #0284c7; }
+.a4-sheet.layout-luxury.theme-modern-blue .hero-code { color: #0284c7; }
+
+.a4-sheet.layout-luxury.theme-cyan .luxury-header-banner { background: linear-gradient(135deg, #004d40, #00acc1); }
+.a4-sheet.layout-luxury.theme-cyan .deck-value.highlight { color: #00838f; }
+.a4-sheet.layout-luxury.theme-cyan .hero-code { color: #00838f; }
+
+.a4-sheet.layout-luxury.theme-navy .luxury-header-banner { background: linear-gradient(135deg, #1e1b4b, #2563eb); }
+.a4-sheet.layout-luxury.theme-navy .deck-value.highlight { color: #1d4ed8; }
+.a4-sheet.layout-luxury.theme-navy .hero-code { color: #1d4ed8; }
+
+.a4-sheet.layout-luxury.theme-emerald .luxury-header-banner { background: linear-gradient(135deg, #064e3b, #059669); }
+.a4-sheet.layout-luxury.theme-emerald .deck-value.highlight { color: #047857; }
+.a4-sheet.layout-luxury.theme-emerald .hero-code { color: #047857; }
+
+.a4-sheet.layout-luxury.theme-crimson .luxury-header-banner { background: linear-gradient(135deg, #4c0519, #e11d48); }
+.a4-sheet.layout-luxury.theme-crimson .deck-value.highlight { color: #be123c; }
+.a4-sheet.layout-luxury.theme-crimson .hero-code { color: #be123c; }
+
+/* ==========================================
+   COMMON FOOTER
+   ========================================== */
+.doc-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.barcode-box,
 .barcode-container {
-  height: 45px;
+  height: 40px;
 }
 
 #pnr-barcode {
-  height: 45px;
-  max-width: 200px;
+  height: 40px;
+  max-width: 190px;
+}
+
+.notice-list {
+  list-style: none;
+  font-size: 0.65rem;
+  color: #64748b;
+  line-height: 1.45;
+  text-align: right;
 }
 
 .notice-text {
   font-size: 0.65rem;
   color: #64748b;
   text-align: right;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 /* ==========================================
@@ -716,7 +1027,7 @@ body {
     height: auto !important;
     min-height: auto !important;
     box-shadow: none !important;
-    padding: 10mm 12mm !important;
+    padding: 8mm 12mm !important;
     margin: 0 !important;
     transform: none !important;
   }

@@ -7,7 +7,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- html2pdf.js & JsBarcode -->
@@ -34,15 +34,29 @@
       <button id="btn-clear-form" class="btn btn-ghost">
         <i class="fa-solid fa-trash-can"></i> Clear Form
       </button>
-      <div class="theme-picker">
-        <label><i class="fa-solid fa-palette"></i> Table Theme:</label>
-        <select id="theme-select">
-          <option value="theme-cyan" selected>Cyan (Original)</option>
-          <option value="theme-navy">Royal Navy</option>
-          <option value="theme-emerald">Emerald Green</option>
-          <option value="theme-crimson">Crimson Red</option>
+
+      <!-- LAYOUT TEMPLATE SELECTOR -->
+      <div class="layout-picker">
+        <label><i class="fa-solid fa-layer-group"></i> Template:</label>
+        <select id="layout-select">
+          <option value="layout-luxury" selected>💎 Luxury Executive (V3)</option>
+          <option value="layout-modern">✨ Modern Airline (V2)</option>
+          <option value="layout-classic">📋 Classic Table (V1)</option>
         </select>
       </div>
+
+      <!-- THEME SELECTOR -->
+      <div class="theme-picker">
+        <label><i class="fa-solid fa-palette"></i> Color:</label>
+        <select id="theme-select">
+          <option value="theme-modern-blue" selected>Sky Blue</option>
+          <option value="theme-cyan">Cyan Classic</option>
+          <option value="theme-navy">Royal Indigo</option>
+          <option value="theme-emerald">Emerald Gold</option>
+          <option value="theme-crimson">Red Velvet</option>
+        </select>
+      </div>
+
       <button id="btn-print" class="btn btn-primary">
         <i class="fa-solid fa-print"></i> Print Ticket
       </button>
@@ -180,10 +194,10 @@
 
     </section>
 
-    <!-- RIGHT PANEL: REAL-TIME A4 TICKET PREVIEW -->
+    <!-- RIGHT PANEL: REAL-TIME A4 PREVIEW -->
     <section class="preview-panel">
       <div class="preview-toolbar">
-        <span><i class="fa-solid fa-eye"></i> Live A4 Print Preview</span>
+        <span id="preview-mode-title"><i class="fa-solid fa-eye"></i> Ticket Preview Studio</span>
         <div class="zoom-controls">
           <button id="btn-zoom-out" title="Zoom Out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
           <span id="zoom-level">100%</span>
@@ -194,98 +208,8 @@
 
       <div class="preview-viewport">
         <!-- A4 SHEET PREVIEW -->
-        <div id="ticket-document" class="a4-sheet theme-cyan">
-          
-          <!-- TICKET HEADER -->
-          <header class="doc-header">
-            <!-- Header Left: Logo -->
-            <div class="header-left">
-              <div id="doc-logo-container" class="doc-logo-wrapper">
-                <svg id="default-logo-svg" class="default-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M50 10 C30 10 15 30 15 50 C15 70 30 90 50 90 C70 90 85 70 85 50 C85 30 70 10 50 10 Z" fill="#e53935"/>
-                  <path d="M50 20 L58 42 L80 42 L62 55 L69 76 L50 64 L31 76 L38 55 L20 42 L42 42 Z" fill="#ffffff"/>
-                </svg>
-                <img id="doc-logo-img" class="doc-logo-img hidden" src="" alt="Agency Logo">
-              </div>
-              <div class="logo-brand-text">
-                <span id="doc-brand-title">Tanvir Air</span>
-                <span id="doc-brand-sub">TRAVELS</span>
-              </div>
-            </div>
-
-            <!-- Header Right: Business Info -->
-            <div class="header-right">
-              <h2 id="doc-agency-name">Tanvir Air Travels</h2>
-              <p id="doc-agency-tagline" class="sub-agency">-Govt. Approved Travel Agent.</p>
-              <p id="doc-agency-address" class="address-text">ADDRESS : Sharno Market (2nd Floor), Dollai Nowabpur,<br>Chandina, Comilla, Bangladesh.</p>
-              <p id="doc-agency-mobile" class="mobile-text">MOBILE : +88 01761-953000<br>+88 01304-222233</p>
-            </div>
-          </header>
-
-          <!-- ITINERARY TITLE -->
-          <div class="doc-title-wrapper">
-            <h1 class="doc-title">ITINERARY</h1>
-          </div>
-
-          <!-- TABLE 1: PASSENGER INFORMATION -->
-          <div class="doc-section">
-            <div class="table-label">PASSENGER INFORMATION</div>
-            <table class="doc-table">
-              <thead>
-                <tr>
-                  <th style="width: 45%;">PASSENGER NAME</th>
-                  <th style="width: 30%;">PASSPORT NUMBER</th>
-                  <th style="width: 25%;">MOBILE NUMBER</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td id="doc-pass-name" class="font-bold">BILAL HOSSAN</td>
-                  <td id="doc-pass-passport">A22042921</td>
-                  <td id="doc-pass-mobile"></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- TABLE 2: BOOKING DETAILS -->
-          <div class="doc-section">
-            <table class="doc-table">
-              <thead>
-                <tr>
-                  <th style="width: 25%;">PNR</th>
-                  <th style="width: 30%;">AIR TICKET NUMBER</th>
-                  <th style="width: 25%;">DATE OF ISSUE</th>
-                  <th style="width: 20%;">Check-in</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td id="doc-ticket-pnr" class="font-bold">PBQU7T</td>
-                  <td id="doc-ticket-number">-</td>
-                  <td id="doc-ticket-date">25 July 2026</td>
-                  <td id="doc-ticket-checkin"></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- DYNAMIC FLIGHT SEGMENTS CONTAINER -->
-          <div id="doc-flights-container">
-            <!-- Flight tables and layover stops rendered dynamically -->
-          </div>
-
-          <!-- TICKET FOOTER / WATERMARK -->
-          <footer class="doc-footer">
-            <div class="barcode-container">
-              <svg id="pnr-barcode"></svg>
-            </div>
-            <div class="notice-text">
-              <p>* Please check flight timings with airline 24 hours prior to departure.</p>
-              <p>* Carry a valid passport with at least 6 months validity & required visa documents.</p>
-            </div>
-          </footer>
-
+        <div id="ticket-document" class="a4-sheet theme-modern-blue layout-luxury">
+          <!-- Dynamic Content Rendered by app.js based on selected Layout & Theme -->
         </div>
       </div>
 
