@@ -122,7 +122,77 @@
         </div>
       </div>
 
-      <!-- Accordion 2: Passenger Information -->
+      <!-- Accordion 2: Typography & Font Controls -->
+      <div class="card accordion active">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-text-height"></i> Typography & Font Settings</h3>
+          <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="font-header-size">Header Font Size</label>
+              <select id="font-header-size">
+                <option value="1.25rem">Small (1.25rem)</option>
+                <option value="1.5rem" selected>Medium (1.5rem)</option>
+                <option value="1.8rem">Large (1.8rem)</option>
+                <option value="2.1rem">Extra Large (2.1rem)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="font-header-weight">Header Weight</label>
+              <select id="font-header-weight">
+                <option value="500">Normal (500)</option>
+                <option value="600">SemiBold (600)</option>
+                <option value="700">Bold (700)</option>
+                <option value="800" selected>Extra Bold (800)</option>
+                <option value="900">Black (900)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row margin-top-xs">
+            <div class="form-group">
+              <label for="font-body-size">Body & Table Font Size</label>
+              <select id="font-body-size">
+                <option value="0.7rem">Compact (0.7rem)</option>
+                <option value="0.78rem" selected>Normal (0.78rem)</option>
+                <option value="0.88rem">Large (0.88rem)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="font-body-weight">Body & Table Weight</label>
+              <select id="font-body-weight">
+                <option value="400">Regular (400)</option>
+                <option value="500">Medium (500)</option>
+                <option value="600" selected>SemiBold (600)</option>
+                <option value="700">Bold (700)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row margin-top-xs">
+            <div class="form-group">
+              <label for="font-code-size">Airport Code Font Size</label>
+              <select id="font-code-size">
+                <option value="1.5rem">Normal (1.5rem)</option>
+                <option value="1.8rem" selected>Large (1.8rem)</option>
+                <option value="2.2rem">Extra Large (2.2rem)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="font-code-weight">Airport Code Weight</label>
+              <select id="font-code-weight">
+                <option value="600">SemiBold (600)</option>
+                <option value="700">Bold (700)</option>
+                <option value="900" selected>Heavy Black (900)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 3: Passenger Information -->
       <div class="card accordion active">
         <div class="card-header">
           <h3><i class="fa-solid fa-user-tag"></i> Passenger Information</h3>
@@ -146,7 +216,7 @@
         </div>
       </div>
 
-      <!-- Accordion 3: Booking & Ticket Details -->
+      <!-- Accordion 4: Booking & Ticket Details -->
       <div class="card accordion active">
         <div class="card-header">
           <h3><i class="fa-solid fa-ticket"></i> Booking & Ticket Details</h3>
@@ -176,7 +246,7 @@
         </div>
       </div>
 
-      <!-- Accordion 4: Flight Segments -->
+      <!-- Accordion 5: Flight Segments -->
       <div class="card accordion active">
         <div class="card-header">
           <h3><i class="fa-solid fa-plane"></i> Flight Segments</h3>
@@ -209,7 +279,7 @@
       <div class="preview-viewport">
         <!-- A4 SHEET PREVIEW -->
         <div id="ticket-document" class="a4-sheet theme-modern-blue layout-luxury">
-          <!-- Dynamic Content Rendered by app.js based on selected Layout & Theme -->
+          <!-- Dynamic Content Rendered by app.js based on selected Layout, Theme, and Typography -->
         </div>
       </div>
 

@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
     dateOfIssue: "25 July 2026",
     checkInStatus: "",
 
+    typography: {
+      headerSize: "1.5rem",
+      headerWeight: "800",
+      bodySize: "0.78rem",
+      bodyWeight: "600",
+      codeSize: "1.8rem",
+      codeWeight: "900"
+    },
+
     segments: [
       {
         id: "seg-1",
@@ -73,6 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnResetLogo = document.getElementById('btn-reset-logo');
   const logoFileName = document.getElementById('logo-file-name');
 
+  // TYPOGRAPHY INPUTS
+  const fontHeaderSizeSelect = document.getElementById('font-header-size');
+  const fontHeaderWeightSelect = document.getElementById('font-header-weight');
+  const fontBodySizeSelect = document.getElementById('font-body-size');
+  const fontBodyWeightSelect = document.getElementById('font-body-weight');
+  const fontCodeSizeSelect = document.getElementById('font-code-size');
+  const fontCodeWeightSelect = document.getElementById('font-code-weight');
+
   const passNameInput = document.getElementById('pass-name');
   const passPassportInput = document.getElementById('pass-passport');
   const passMobileInput = document.getElementById('pass-mobile');
@@ -121,6 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
     agencyAddressInput.value = state.agencyAddress || '';
     agencyMobile1Input.value = state.agencyMobile1 || '';
     agencyMobile2Input.value = state.agencyMobile2 || '';
+
+    if (state.typography) {
+      fontHeaderSizeSelect.value = state.typography.headerSize || '1.5rem';
+      fontHeaderWeightSelect.value = state.typography.headerWeight || '800';
+      fontBodySizeSelect.value = state.typography.bodySize || '0.78rem';
+      fontBodyWeightSelect.value = state.typography.bodyWeight || '600';
+      fontCodeSizeSelect.value = state.typography.codeSize || '1.8rem';
+      fontCodeWeightSelect.value = state.typography.codeWeight || '900';
+    }
 
     passNameInput.value = state.passengerName || '';
     passPassportInput.value = state.passportNumber || '';
@@ -270,6 +296,14 @@ document.addEventListener('DOMContentLoaded', () => {
     agencyMobile1Input.oninput = (e) => { state.agencyMobile1 = e.target.value; renderPreview(); };
     agencyMobile2Input.oninput = (e) => { state.agencyMobile2 = e.target.value; renderPreview(); };
 
+    // Typography Controls
+    fontHeaderSizeSelect.onchange = (e) => { state.typography.headerSize = e.target.value; renderPreview(); };
+    fontHeaderWeightSelect.onchange = (e) => { state.typography.headerWeight = e.target.value; renderPreview(); };
+    fontBodySizeSelect.onchange = (e) => { state.typography.bodySize = e.target.value; renderPreview(); };
+    fontBodyWeightSelect.onchange = (e) => { state.typography.bodyWeight = e.target.value; renderPreview(); };
+    fontCodeSizeSelect.onchange = (e) => { state.typography.codeSize = e.target.value; renderPreview(); };
+    fontCodeWeightSelect.onchange = (e) => { state.typography.codeWeight = e.target.value; renderPreview(); };
+
     passNameInput.oninput = (e) => { state.passengerName = e.target.value; renderPreview(); };
     passPassportInput.oninput = (e) => { state.passportNumber = e.target.value; renderPreview(); };
     passMobileInput.oninput = (e) => { state.passengerMobile = e.target.value; renderPreview(); };
@@ -339,6 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
         agencyMobile1: '',
         agencyMobile2: '',
         logoDataUrl: null,
+
+        typography: {
+          headerSize: "1.5rem",
+          headerWeight: "800",
+          bodySize: "0.78rem",
+          bodyWeight: "600",
+          codeSize: "1.8rem",
+          codeWeight: "900"
+        },
 
         passengerName: '',
         passportNumber: '',
@@ -426,11 +469,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // RENDER PREVIEW DOCUMENT (V1 CLASSIC vs V2 MODERN vs V3 LUXURY)
+  // RENDER PREVIEW DOCUMENT (DYNAMIC TYPOGRAPHY & LAYOUTS)
   function renderPreview() {
     ticketDocument.className = `a4-sheet ${currentTheme} ${currentLayout}`;
 
-    // Logo HTML helper (ONLY THE LOGO IMAGE / ICON IS DISPLAYED)
+    // Apply Typography CSS Custom Properties
+    if (state.typography) {
+      ticketDocument.style.setProperty('--doc-header-size', state.typography.headerSize);
+      ticketDocument.style.setProperty('--doc-header-weight', state.typography.headerWeight);
+      ticketDocument.style.setProperty('--doc-body-size', state.typography.bodySize);
+      ticketDocument.style.setProperty('--doc-body-weight', state.typography.bodyWeight);
+      ticketDocument.style.setProperty('--doc-code-size', state.typography.codeSize);
+      ticketDocument.style.setProperty('--doc-code-weight', state.typography.codeWeight);
+    }
+
+    // Logo HTML helper
     const logoHtml = state.logoDataUrl
       ? `<img class="doc-logo-img" src="${state.logoDataUrl}" alt="Agency Logo">`
       : `<svg class="default-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
