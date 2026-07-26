@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
       codeWeight: "900"
     },
 
+    footerNote1: "Please check flight timings with airline 24 hours prior to departure.",
+    footerNote2: "Carry a valid passport with at least 6 months validity & required visa documents.",
+    footerNote3: "For baggage policy or itinerary changes, contact agency helpline.",
+
     segments: [
       {
         id: "seg-1",
@@ -90,6 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const fontCodeSizeSelect = document.getElementById('font-code-size');
   const fontCodeWeightSelect = document.getElementById('font-code-weight');
 
+  // FOOTER NOTES INPUTS
+  const footerNote1Input = document.getElementById('footer-note1');
+  const footerNote2Input = document.getElementById('footer-note2');
+  const footerNote3Input = document.getElementById('footer-note3');
+
   const passNameInput = document.getElementById('pass-name');
   const passPassportInput = document.getElementById('pass-passport');
   const passMobileInput = document.getElementById('pass-mobile');
@@ -147,6 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
       fontCodeSizeSelect.value = state.typography.codeSize || '1.8rem';
       fontCodeWeightSelect.value = state.typography.codeWeight || '900';
     }
+
+    footerNote1Input.value = state.footerNote1 || '';
+    footerNote2Input.value = state.footerNote2 || '';
+    footerNote3Input.value = state.footerNote3 || '';
 
     passNameInput.value = state.passengerName || '';
     passPassportInput.value = state.passportNumber || '';
@@ -304,6 +317,11 @@ document.addEventListener('DOMContentLoaded', () => {
     fontCodeSizeSelect.onchange = (e) => { state.typography.codeSize = e.target.value; renderPreview(); };
     fontCodeWeightSelect.onchange = (e) => { state.typography.codeWeight = e.target.value; renderPreview(); };
 
+    // Footer Notes Controls
+    footerNote1Input.oninput = (e) => { state.footerNote1 = e.target.value; renderPreview(); };
+    footerNote2Input.oninput = (e) => { state.footerNote2 = e.target.value; renderPreview(); };
+    footerNote3Input.oninput = (e) => { state.footerNote3 = e.target.value; renderPreview(); };
+
     passNameInput.oninput = (e) => { state.passengerName = e.target.value; renderPreview(); };
     passPassportInput.oninput = (e) => { state.passportNumber = e.target.value; renderPreview(); };
     passMobileInput.oninput = (e) => { state.passengerMobile = e.target.value; renderPreview(); };
@@ -382,6 +400,10 @@ document.addEventListener('DOMContentLoaded', () => {
           codeSize: "1.8rem",
           codeWeight: "900"
         },
+
+        footerNote1: '',
+        footerNote2: '',
+        footerNote3: '',
 
         passengerName: '',
         passportNumber: '',
@@ -638,8 +660,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <svg id="pnr-barcode"></svg>
         </div>
         <div class="notice-text">
-          <p>* Please check flight timings with airline 24 hours prior to departure.</p>
-          <p>* Carry a valid passport with at least 6 months validity & required visa documents.</p>
+          ${state.footerNote1 ? `<p>* ${state.footerNote1}</p>` : ''}
+          ${state.footerNote2 ? `<p>* ${state.footerNote2}</p>` : ''}
+          ${state.footerNote3 ? `<p>* ${state.footerNote3}</p>` : ''}
         </div>
       </footer>
     `;
@@ -804,9 +827,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="footer-right">
           <ul class="notice-list">
-            <li><i class="fa-solid fa-info-circle"></i> Check-in closes 60 minutes prior to scheduled flight departure.</li>
-            <li><i class="fa-solid fa-id-card"></i> Carry valid Passport, Visa & Govt. Photo ID during entire travel.</li>
-            <li><i class="fa-solid fa-headset"></i> For baggage policy or itinerary changes, contact agency helpline.</li>
+            ${state.footerNote1 ? `<li><i class="fa-solid fa-info-circle"></i> ${state.footerNote1}</li>` : ''}
+            ${state.footerNote2 ? `<li><i class="fa-solid fa-id-card"></i> ${state.footerNote2}</li>` : ''}
+            ${state.footerNote3 ? `<li><i class="fa-solid fa-headset"></i> ${state.footerNote3}</li>` : ''}
           </ul>
         </div>
       </footer>
@@ -964,8 +987,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <svg id="pnr-barcode"></svg>
         </div>
         <div class="notice-side">
-          <p><i class="fa-solid fa-circle-info"></i> Please report at airline check-in counter at least 3 hours prior to international departures.</p>
-          <p><i class="fa-solid fa-id-card"></i> Carry government-approved passport and visa documents for security clearance.</p>
+          ${state.footerNote1 ? `<p><i class="fa-solid fa-circle-info"></i> ${state.footerNote1}</p>` : ''}
+          ${state.footerNote2 ? `<p><i class="fa-solid fa-id-card"></i> ${state.footerNote2}</p>` : ''}
+          ${state.footerNote3 ? `<p><i class="fa-solid fa-headset"></i> ${state.footerNote3}</p>` : ''}
         </div>
       </footer>
     `;
